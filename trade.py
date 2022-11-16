@@ -34,7 +34,7 @@ class Trade:
             return -random.uniform(self.min_trade_amount, self.max_trade_amount)
         return 0
     def backtesting(self):
-        df = pd.read_csv('data.csv')
+        df = pd.read_csv('./data.csv')
         min_asset_value = 1000
         for i in range(1, len(df.index)):
             self.current_btc_price = (df["open"][i] + df["close"][i]) / 2
