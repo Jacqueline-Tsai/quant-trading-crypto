@@ -53,7 +53,7 @@ Clone repo and install [environment.yaml](https://github.com/Jacqueline-Tsai/qua
 ```bash
 git clone https://github.com/Jacqueline-Tsai/quant-trading-crypto  # clone
 cd quant-trading-crypto
-conda env create -f /path/to/environment.yml # create anaconda environment
+conda env create -f environment.yml # create anaconda environment
 ```
 </details>
 
