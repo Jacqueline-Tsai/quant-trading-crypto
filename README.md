@@ -18,6 +18,7 @@
 - [Introduction Of Project](#introduction-of-project)
   - [Features](#features)
   - [Develop With](#develop-with)
+- [Set up environmnet](#set-up-environmnet)
 - [Include library](#include-library)
 - [License](#license)
 - [Developer Contact](#developer-contact)
@@ -30,8 +31,8 @@ Write a trading robot to automatively buy and sell BTC
 ### Features
 
 - Read history data
-- Use random function to buy and sell BTC
-- Help user to earn money with it (hopefully?) 
+- Use price index to decide whether should we buy or sell BTC
+- Find out which parameter can earn more money in history data
 
 
 ### Develop With
@@ -41,17 +42,42 @@ Write a trading robot to automatively buy and sell BTC
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+## Set up environmnet
+
+<details open>
+<summary>Install</summary>
+
+Clone repo and install [environment.yaml](https://github.com/Jacqueline-Tsai/quant-trading-crypto/master/environment.yaml)
+
+
+```bash
+git clone https://github.com/Jacqueline-Tsai/quant-trading-crypto  # clone
+cd quant-trading-crypto
+conda env create -f /path/to/environment.yml # create anaconda environment
+```
+</details>
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
 ## Include library
 
-#### 1.OS
+#### 1.numpy
 
 #### 2.pandas
+
+#### 3.talib
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 ## Python code introduction
 #### 1.trade.py
+
+#### 2.mix_function.ipynb.py
+
+Read history data from csv and using four price index, including ATR, SMA, DEMA and TRIMA, to measure the market condition.
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -64,7 +90,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Developer Contact
 
-- Jacqueline-Tsai - "Enter your email"
+- Jacqueline-Tsai - "jaynnah01180118@gmail.com"
+
+- Oscar Wei - "wei573434@gmail.com"
 
 
 - Project Link: [https://github.com/Jacqueline-Tsai/quant-trading-crypto](https://github.com/Jacqueline-Tsai/quant-trading-crypto)
