@@ -3,7 +3,11 @@ import time, math
 
 class Trade:
     # const
+<<<<<<< Updated upstream
     brokerage_fee = 0
+=======
+    brokerage_fee = 0.0015
+>>>>>>> Stashed changes
     overall_stop_loss_point = 800
     min_trade_amount = 1 #USD
     max_trade_amount = 15 #USD
@@ -12,9 +16,14 @@ class Trade:
     asset_present_btc_amount = 0
     asset_present_usd_amount = 1000
     current_btc_price = 0   # tmp
+<<<<<<< Updated upstream
 
     cost_price = 0
     rate_of_return_freq = [0 for i in range(20)]
+=======
+    # rsi variable
+    short_tern_pos = 0 
+>>>>>>> Stashed changes
     def buy(self, amount): #以實際成交價為主
         #print('buy', self.current_btc_price)
         self.asset_present_usd_amount -= amount * (1 + self.brokerage_fee)
@@ -52,7 +61,10 @@ class Trade:
         self.sell_all()
         print("final asset value : ", self.get_asset_present_value())
         print("min asset value : ", min_asset_value)
+<<<<<<< Updated upstream
         print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
         print("number of sell : ", sum([1 if i==-1000 else 0 for i in action]))
         print("rate of return frequency : ", self.rate_of_return_freq)
+=======
+>>>>>>> Stashed changes
 
