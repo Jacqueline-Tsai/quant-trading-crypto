@@ -1,10 +1,9 @@
-import random
 import pandas as pd
-import time
+import time, math
 
 class Trade:
     # const
-    brokerage_fee = 0.003
+    brokerage_fee = 0
     overall_stop_loss_point = 800
     min_trade_amount = 1 #USD
     max_trade_amount = 15 #USD
@@ -13,44 +12,47 @@ class Trade:
     asset_present_btc_amount = 0
     asset_present_usd_amount = 1000
     current_btc_price = 0   # tmp
+
+    cost_price = 0
+    rate_of_return_freq = [0 for i in range(20)]
     def buy(self, amount): #以實際成交價為主
-        #print('buy', amount)
+        #print('buy', self.current_btc_price)
         self.asset_present_usd_amount -= amount * (1 + self.brokerage_fee)
         self.asset_present_btc_amount += amount / self.current_btc_price
+        self.cost_price = self.current_btc_price
     def sell(self, amount):
-        #print('sell', amount)
+        #print('sell', self.current_btc_price)
         self.asset_present_usd_amount += amount * (1 - self.brokerage_fee)
         self.asset_present_btc_amount -= amount / self.current_btc_price
+        if self.cost_price!=0: self.rate_of_return_freq[math.floor((self.current_btc_price/self.cost_price - 1)*100)] += 1
+    def sell_all(self):
+        self.sell(self.current_btc_price * self.asset_present_btc_amount)
     def get_current_btc_price(self): #tmp
         return self.current_btc_price
     def get_asset_present_value(self):
         return self.get_current_btc_price() * self.asset_present_btc_amount + self.asset_present_usd_amount
-    def get_prediction(self):
+    def get_prediction(self): #tmp
         # postive for buy, negitive for sell
-        rand_num = random.random()
-        if rand_num<0.001:
-            return random.uniform(self.min_trade_amount, self.max_trade_amount)
-        elif rand_num>0.999:
-            return -random.uniform(self.min_trade_amount, self.max_trade_amount)
         return 0
-    def backtesting(self):
-        df = pd.read_csv('./data.csv')
+    def backtesting(self, action):
+        df = pd.read_csv('data.csv').reset_index(drop=True)
         min_asset_value = 1000
-        for i in range(1, len(df.index)):
-            self.current_btc_price = (df["open"][i] + df["close"][i]) / 2
-            current_btc_price = self.get_current_btc_price()
-            action = self.get_prediction()
-            if action > self.min_trade_amount:
-                self.buy(min(self.asset_present_usd_amount, action))
-            if action < -self.min_trade_amount:
-                self.sell(min(self.asset_present_btc_amount * current_btc_price, -action))
+        for i in range(1,len(action)):#3949013, 5217470
+            if action[i] == 0: continue
+            self.current_btc_price = df['open'][i+1]
+            if action[i] >= self.min_trade_amount:
+                self.buy(min(self.asset_present_usd_amount, action[i]))
+            if action[i] <= -self.min_trade_amount:
+                self.sell(min(self.asset_present_btc_amount * self.current_btc_price, -action[i]))
             min_asset_value = min(min_asset_value, self.get_asset_present_value())
             if min_asset_value < self.overall_stop_loss_point:
                 print("you're done")
                 break
-        print("result : ",self.get_asset_present_value())        
+        self.current_btc_price = df['open'][len(action)-1]
+        self.sell_all()
+        print("final asset value : ", self.get_asset_present_value())
         print("min asset value : ", min_asset_value)
-#df = df.set_axis(['startTime', 'time', 'open', 'high', 'low', 'close', 'volume'], axis=1).drop([0])
+        print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
+        print("number of sell : ", sum([1 if i==-1000 else 0 for i in action]))
+        print("rate of return frequency : ", self.rate_of_return_freq)
 
-trade = Trade() 
-trade.backtesting()
