@@ -79,22 +79,12 @@ def amount(df):
         val1 = df.high[i]-df.low[i]
         val2 = abs(df.close[i-1]-df.low[i])
         val3 = abs(df.close[i-1]-df.high[i])
-        atr.append(1000 / max(max(1, val1), max(val2, val3)))
+        atr.append(min(70 * max(max(1, val1), max(val2, val3)), 1000))
+        #atr.append(1000)
     return pd.Series(atr)
 
 
 history_data = pd.read_csv('data.csv')
 trade = Trade()
-trade.backtesting(sma(history_data, 4, 7))  # * amount(history_data)
-
-
-"""
-for s in [1,2,3,4,5]:
-    for l in [3,4,5,6,7,8,9]:
-        if s>=l:continue
-        print(s, l)
-        sma(history_data, s, l)
-"""
-
-#print(len(sma10), len(sma5), sma5,dema_dif)
-record1, record2 = 3949013, 5217470
+trade.backtesting(sma(history_data, 4, 7) * amount(history_data))
+# + dema(history_data, 4, 7) * amount(history_data) + trima(history_data, 4, 7) * amount(history_data)

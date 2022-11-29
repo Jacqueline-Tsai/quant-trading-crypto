@@ -3,11 +3,7 @@ import time, math
 
 class Trade:
     # const
-<<<<<<< Updated upstream
     brokerage_fee = 0
-=======
-    brokerage_fee = 0.0015
->>>>>>> Stashed changes
     overall_stop_loss_point = 800
     min_trade_amount = 1 #USD
     max_trade_amount = 15 #USD
@@ -16,24 +12,21 @@ class Trade:
     asset_present_btc_amount = 0
     asset_present_usd_amount = 1000
     current_btc_price = 0   # tmp
-<<<<<<< Updated upstream
 
-    cost_price = 0
-    rate_of_return_freq = [0 for i in range(20)]
-=======
-    # rsi variable
-    short_tern_pos = 0 
->>>>>>> Stashed changes
+    #cost_price = 0
+    #rate_of_return_freq = [0 for i in range(20)]
+    total_cost = 0
     def buy(self, amount): #以實際成交價為主
         #print('buy', self.current_btc_price)
         self.asset_present_usd_amount -= amount * (1 + self.brokerage_fee)
         self.asset_present_btc_amount += amount / self.current_btc_price
-        self.cost_price = self.current_btc_price
+        self.total_cost += amount
+        #self.cost_price = self.current_btc_price
     def sell(self, amount):
         #print('sell', self.current_btc_price)
         self.asset_present_usd_amount += amount * (1 - self.brokerage_fee)
         self.asset_present_btc_amount -= amount / self.current_btc_price
-        if self.cost_price!=0: self.rate_of_return_freq[math.floor((self.current_btc_price/self.cost_price - 1)*100)] += 1
+        #if self.cost_price!=0: self.rate_of_return_freq[math.floor((self.current_btc_price/self.cost_price - 1)*100)] += 1
     def sell_all(self):
         self.sell(self.current_btc_price * self.asset_present_btc_amount)
     def get_current_btc_price(self): #tmp
@@ -52,7 +45,8 @@ class Trade:
             if action[i] >= self.min_trade_amount:
                 self.buy(min(self.asset_present_usd_amount, action[i]))
             if action[i] <= -self.min_trade_amount:
-                self.sell(min(self.asset_present_btc_amount * self.current_btc_price, -action[i]))
+                #self.sell(min(self.asset_present_btc_amount * self.current_btc_price, -action[i]))
+                self.sell_all()
             min_asset_value = min(min_asset_value, self.get_asset_present_value())
             if min_asset_value < self.overall_stop_loss_point:
                 print("you're done")
@@ -61,10 +55,8 @@ class Trade:
         self.sell_all()
         print("final asset value : ", self.get_asset_present_value())
         print("min asset value : ", min_asset_value)
-<<<<<<< Updated upstream
-        print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
-        print("number of sell : ", sum([1 if i==-1000 else 0 for i in action]))
-        print("rate of return frequency : ", self.rate_of_return_freq)
-=======
->>>>>>> Stashed changes
+        print("total cost : ", self.total_cost)
+        #print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
+        #print("number of sell : ", sum([1 if i==-1000 else 0 for i in action]))
+        #print("rate of return frequency : ", self.rate_of_return_freq)
 
