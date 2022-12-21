@@ -63,13 +63,14 @@ class Trade:
         
         start_time = datetime.strptime(' '.join(df['startTime'][0].split('T')).split('+')[0], '%Y-%m-%d %H:%M:%S')
         end_time = datetime.strptime(' '.join(df['startTime'][len(df)-1].split('T')).split('+')[0], '%Y-%m-%d %H:%M:%S')
+        print("============================ RESULT ============================")
         print("Trading Period: ", start_time, '~', end_time)
         print("Final asset value: ", self.get_asset_present_value())
         print('Hold Until End: ', df['close'][len(df)-1] / df['close'][0] * 1000)
         print('Internal Rate of Return: ', pow(self.get_asset_present_value()/1000, 365/(end_time-start_time).days))
         print('Max Dropdown: ', self.max_drawdown)
         
-        print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
+        print("number of trancations : ", sum([1 if i==1 else 0 for i in action]))
         #print("number of sell : ", sum([1 if i==-1000 else 0 for i in action]))
         #print("rate of return frequency : ", self.rate_of_return_freq)
 
