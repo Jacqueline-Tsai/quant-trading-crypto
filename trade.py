@@ -6,7 +6,7 @@ class Trade:
     # const
     brokerage_fee = 0.001
     overall_stop_loss_point = 800
-    min_trade_amount = 1 #USD
+    min_trade_amount = 0 #USD
     # variable
     current_position = 0
     asset_present_btc_amount = 0
@@ -34,6 +34,8 @@ class Trade:
         self.max_drawdown = max(self.max_drawdown, (self.max_asset_value - self.get_asset_present_value())/self.max_asset_value)
     def sell_all(self):
         self.sell(self.current_btc_price * self.asset_present_btc_amount)
+    def buy_all(self):
+        self.buy(self.asset_present_usd_amount)
     def get_current_btc_price(self): #tmp
         return self.current_btc_price
     def get_asset_present_value(self):
@@ -47,14 +49,15 @@ class Trade:
             if action[i] == 0: continue
             self.current_btc_price = df['open'][i+1]
             if action[i] >= self.min_trade_amount:
-                self.buy(min(self.asset_present_usd_amount, action[i]))
+                #self.buy(min(self.asset_present_usd_amount, action[i]))
+                self.buy_all()
             if action[i] <= -self.min_trade_amount:
                 #self.sell(min(self.asset_present_btc_amount * self.current_btc_price, -action[i]))
                 self.sell_all()
             min_asset_value = min(min_asset_value, self.get_asset_present_value())
-            if min_asset_value < self.overall_stop_loss_point:
-                print("you're done")
-                break
+            #if min_asset_value < self.overall_stop_loss_point:
+                #print("you're done")
+                #break
         self.current_btc_price = df['open'][len(action)-1]
         self.sell_all()
         
@@ -65,7 +68,8 @@ class Trade:
         print('Hold Until End: ', df['close'][len(df)-1] / df['close'][0] * 1000)
         print('Internal Rate of Return: ', pow(self.get_asset_present_value()/1000, 365/(end_time-start_time).days))
         print('Max Dropdown: ', self.max_drawdown)
-        #print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
+        
+        print("number of buy : ", sum([1 if i==1000 else 0 for i in action]))
         #print("number of sell : ", sum([1 if i==-1000 else 0 for i in action]))
         #print("rate of return frequency : ", self.rate_of_return_freq)
 
