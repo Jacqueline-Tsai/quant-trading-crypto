@@ -4,20 +4,24 @@ import (
     "context"
     "strconv"
     "time"
-    "github.com/adshao/go-binance/v2"
+    // "github.com/adshao/go-binance/v2"
 )
 
 func main() {
     // const
     var (   
-        apiKey = "8ablyXVDWrw27SPImVGI0xOd2Tu5vQzpPoA214qQsPvwqEu0ae09MzHgIXVBFyF6"
-        secretKey = "4C5rh5t6UqktlTVJgaZs2n5jIVSO537RzFcXlnqi5A7umydV0KsdjCIzlab9Qo1f"
-        
+        apiKey = ""
+        secretKey = ""
         min_trade_amount = 5 //USDT
     )
-
+    
     // variable
     client := binance.NewClient(apiKey, secretKey)
+    api := gemini.New(
+      false,               // false uses Gemini Sandox site - true uses Gemini Production site
+      apiKey,    // GEMINI_API_KEY
+      secretKey, // GEMINI_API_SECRET
+    )
     asset_present_usdt_amount = 1000
     asset_present_btc_amount = 0    
 
