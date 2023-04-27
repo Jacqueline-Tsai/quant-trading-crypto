@@ -10,8 +10,8 @@ import (
 func main() {
 	// const
 	var (   
-		apiKey = "zenf5G2lXJ32PtZbCmTHa9MjIyEJfFQTxFDDhpHszpEAdODozWrLcRbPC1huFylq"
-		secretKey = "fT5vVQKIHACVKUrQ7VWz97ORokqSEOyZHYzGD6zXCQTmwgzYsTQ9fC0qxUqUMMei"
+		apiKey = os.Getenv("API_KEY")
+		secretKey = os.Getenv("SECRET_KEY")
 		
 		min_trade_amount = 5.0 //USDT
 
