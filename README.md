@@ -34,6 +34,20 @@ Write a trading robot to automatively buy and sell BTC
 - Use price index to decide whether should we buy or sell BTC
 - Find out which parameter can earn more money in history data
 
+## Golang Prerequisites
+
+![Download and Install Go](https://myoctocat.com/assets/images/base-octocat.svg)
+
+## Golang Installing
+
+<details open>
+<summary>Install</summary>
+
+```bash
+git clone https://github.com/Jacqueline-Tsai/quant-trading-crypto  # clone
+cd quant-trading-crypto
+go run main.go
+```
 
 ### Develop With
 
@@ -69,7 +83,6 @@ conda env create -f environment.yml # create anaconda environment
 #### 3.talib
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 ## Python code introduction
 #### 1.trade.py
