@@ -36,7 +36,7 @@ Write a trading robot to automatively buy and sell BTC
 
 ## Golang Prerequisites
 
-![Download and Install Go](https://go.dev/doc/install)
+<a href="doc:[introduction](https://go.dev/doc/install)" target="_blank">Download and Install Go</a>
 
 ## Golang Installing
 
