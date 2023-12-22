@@ -45,7 +45,7 @@ def amount(df):
 """
 
 data = pd.read_csv('20230110_20231111.csv')
-threshold_trail = [0.0005, 0.001, 0.002]
+threshold_trail = [0, 0.0005, 0.001, 0.002]
 for period in [10, 100]:
     for sma_buy_threshold in threshold_trail:
         for sma_sell_threshold in threshold_trail:

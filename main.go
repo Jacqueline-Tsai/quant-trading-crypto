@@ -18,11 +18,12 @@ func main() {
 		// strategy
 		mean_period_short = 4
 		mean_period_long = 9
-		time_period = 2 * time.Second
-		sma_buy_threshold = 0.0
-		sma_sell_threshold = 0.001
-		trima_buy_threshold = 0.0//0.0005
-		trima_sell_threshold = 0.001
+		time_period = 40 * time.Second
+		sma_buy_threshold = 0.0015
+		sma_sell_threshold = 0.002
+		trima_buy_threshold = 0.001
+		trima_sell_threshold = 0.0005
+		stop_loss_amount = 800 //usdt
 	)
 
 	// variable
@@ -31,14 +32,23 @@ func main() {
 	asset_present_btc_amount := 0.0
 	price_list := make([]float64, 0)
 	
-	/*getAccountService := func () {
+	getAccountBalance := func () {
 		res, err := client.NewGetAccountService().Do(context.Background())
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		for _, e := range res.Balances {
+			free, _ := strconv.ParseFloat(e.Free, 32)
+			if e.Asset == "BTC" {
+				asset_present_btc_amount := free
+			}
+			if e.Asset == "USDT" {
+				asset_present_usdt_amount := free
+			}
+		}
 		fmt.Println(res)
-	}*/
+	}
 
 	listOrder := func () {
 		orders, err := client.NewListOrdersService().Symbol("BTCUSDT").Do(context.Background())
@@ -52,17 +62,17 @@ func main() {
 	}
 
 	createMarketBuyOrder := func(amount float64) int { //quantity float64, price float64
-		order, err := client.NewCreateOrderService().Symbol("BTCUSDT").Side(binance.SideTypeBuy).Type(binance.OrderTypeMarket).Quantity("0.0005").Do(context.Background()) //.Price("10000")
+		order, err := client.NewCreateOrderService().Symbol("BTCUSDT").Side(binance.SideTypeBuy).Type(binance.OrderTypeMarket).Quantity(amount).Do(context.Background())
 		if err != nil {
 			fmt.Println(err)
 			return -1
 		}
 		fmt.Println(order)
-		return 0//order
+		return 0
 	}
 
 	createMarketSellOrder := func(amount float64) int { //quantity float64, price float64
-		order, err := client.NewCreateOrderService().Symbol("BTCUSDT").Side(binance.SideTypeSell).Type(binance.OrderTypeMarket).Quantity("0.0005").Do(context.Background()) //.Price("10000")
+		order, err := client.NewCreateOrderService().Symbol("BTCUSDT").Side(binance.SideTypeSell).Type(binance.OrderTypeMarket).Quantity(amount).Do(context.Background())
 		if err != nil {
 			fmt.Println(err)
 			return -1
@@ -80,7 +90,6 @@ func main() {
 	}*/
 
 	getPrice := func () {
-	// add new price to list
 		prices, err := client.NewListPricesService().Do(context.Background())
 		if err != nil {
 			fmt.Println(err)
@@ -117,6 +126,11 @@ func main() {
 
 		getPrice()
 		price := price_list[len(price_list)-1]
+		getAccountBalance()
+		current_asset_value := asset_present_usdt_amount + price * asset_present_btc_amount
+		if current_asset_value < stop_loss_amount {
+			createMarketSellOrder(asset_present_btc_amount)
+		}
 
 		sma5 := rolling_avg(price_list[2*(mean_period_long-mean_period_short)-1:], mean_period_short)
 		sma10 := rolling_avg(price_list, mean_period_long)
@@ -146,13 +160,9 @@ func main() {
 				fmt.Println(time.Now(), "sell", price, " total usdt: ", asset_present_usdt_amount)				
 			}
 		}
-
-		//fmt.Println(sma5, sma10, trima5, trima10)
-		//fmt.Println(len(sma5), len(sma10), len(trima5), len(trima10))
-		//fmt.Println("==============")
 	}
 	
-	listOrder()
+	getAccountBalance()
 
 	for i:=0; i<mean_period_long*2-1; i++ {
 		getPrice()
