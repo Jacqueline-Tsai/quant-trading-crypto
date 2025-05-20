@@ -7,21 +7,19 @@ import (
     "github.com/adshao/go-binance/v2"
 )
 
-func init() {
-	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+// HelloWorld struct
+type HelloWorld struct{}
+
+// HelloWorld method associated with HelloWorld struct
+func (h HelloWorld) HelloWorld() {
+	fmt.Println("Hello from the HelloWorld method!")
 }
 
-func init() {
-	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
 
 func main() {
+	h := HelloWorld{}
+	h.HelloWorld()
+	
 	// const
 	var (   
 		apiKey = os.Getenv("API_KEY")
