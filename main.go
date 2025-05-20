@@ -8,7 +8,9 @@ import (
 )
 
 // HelloWorld struct
-type HelloWorld struct{}
+type HelloWorld struct {
+	Message string
+}
 
 // HelloWorld method associated with HelloWorld struct
 func (h HelloWorld) HelloWorld() {
@@ -19,7 +21,7 @@ func (h HelloWorld) HelloWorld() {
 func main() {
 	h := HelloWorld{}
 	h.HelloWorld()
-	
+
 	// const
 	var (   
 		apiKey = os.Getenv("API_KEY")
